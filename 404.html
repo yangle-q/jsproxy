@@ -1,1 +1,434 @@
-<html><head><meta charset=utf-8></head><body id=t><svg xmlns=http://www.w3.org/2000/svg width=100% height=100% viewBox="0 0 100 100"preserveAspectRatio=xMidYMid fill=none><circle cx=50 cy=50 r=25.944 stroke=#93dbe9><animate attributeName=r calcMode=spline values=0;40 keyTimes=0;1 dur=1 keySplines="0 0.2 0.8 1"begin=-0.5s repeatCount=indefinite stroke-width=2 /><animate attributeName=opacity calcMode=spline values=1;0 keyTimes=0;1 dur=1 keySplines="0.2 0 0.8 1"begin=-0.5s repeatCount=indefinite stroke-width=2 /></circle><circle cx=50 cy=50 r=40 stroke=#689cc5><animate attributeName=r calcMode=spline values=0;40 keyTimes=0;1 dur=1 keySplines="0 0.2 0.8 1"begin=0s repeatCount=indefinite stroke-width=2 /><animate attributeName=opacity calcMode=spline values=1;0 keyTimes=0;1 dur=1 keySplines="0.2 0 0.8 1"begin=0s repeatCount=indefinite stroke-width=2 /></circle></svg><script>function a(){var e=Date.now();try{var t=+sessionStorage._ts||0;if((sessionStorage._ts=e)-t<100)return setTimeout(a,5e3)}catch(r){}location.reload()}function i(e){n(e.message)}function n(e){t.innerHTML=e}!function s(){if(self.isSecureContext)if(self.ReadableStream){var e=navigator.serviceWorker;if(e)e.register(function r(){return location.pathname.replace(/\/-+https?:.+/,"").replace(/\w+\.\w+$/,"").replace(/\/*$/,"/")}()+"sw.js").then(a)["catch"](i);else{var t=navigator.userAgent;/Firefox/.test(t)?n("本网站不支持 FireFox 隐身模式"):/iPhone|iPad/.test(t)&&n("iOS 上请使用 Safari 浏览器")}}else n("请使用最新的 HTML5 浏览器");else n("本程序需要 HTTPS 站点")}()</script></body></html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>页面未找到 - 清爽代理服务</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <base target="_blank">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --secondary: #3f37c9;
+      --accent: #4cc9f0;
+      --success: #4ade80;
+      --warning: #f87171;
+      --light: #f9fafb;
+      --dark: #1f2937;
+      --gray: #9ca3af;
+      --light-gray: #f3f4f6;
+      --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: #f0f7ff;
+      background-image: linear-gradient(135deg, #e6f0ff 0%, #f8fbff 100%);
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1;
+    }
+    
+    header {
+      text-align: center;
+      padding: 30px 0;
+      margin-bottom: 20px;
+      animation: fadeIn 1s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .logo {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 25px;
+      color: white;
+      font-size: 3rem;
+      box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 800;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .error-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 700px;
+      padding: 40px;
+      margin: 0 auto;
+    }
+    
+    .error-number {
+      font-size: 8rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 10px 20px rgba(67, 97, 238, 0.2);
+      line-height: 1;
+    }
+    
+    .error-title {
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+    
+    .error-message {
+      font-size: 1.2rem;
+      margin-bottom: 35px;
+      color: var(--gray);
+      max-width: 600px;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .btn {
+      padding: 16px 40px;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      color: white;
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.25);
+    }
+    
+    .btn-primary:hover {
+      background: linear-gradient(to right, var(--secondary), var(--primary));
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(67, 97, 238, 0.35);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+    
+    .btn-outline:hover {
+      background: rgba(67, 97, 238, 0.05);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.15);
+    }
+    
+    .btn i {
+      margin-right: 10px;
+      font-size: 1.2rem;
+    }
+    
+    .error-illustration {
+      max-width: 350px;
+      margin: 30px auto 40px;
+      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.1));
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0px); }
+    }
+    
+    .error-reasons {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      margin: 30px 0;
+      box-shadow: var(--card-shadow);
+      max-width: 700px;
+      width: 100%;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .reasons-title {
+      text-align: center;
+      font-size: 1.5rem;
+      margin-bottom: 25px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    
+    .reasons-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .reason-item {
+      display: flex;
+      align-items: flex-start;
+      padding: 15px 20px;
+      background: var(--light);
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+    }
+    
+    .reason-item i {
+      color: var(--primary);
+      font-size: 1.4rem;
+      margin-right: 15px;
+      min-width: 30px;
+      margin-top: 3px;
+    }
+    
+    footer {
+      padding: 30px 0;
+      margin-top: auto;
+      font-size: 0.9rem;
+      color: var(--gray);
+      border-top: 1px solid #e5e7eb;
+      width: 100%;
+    }
+    
+    .tech-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .tech-info-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      background: rgba(243, 244, 246, 0.5);
+      border-radius: 10px;
+      font-size: 0.9rem;
+    }
+    
+    .tech-info-item i {
+      margin-right: 10px;
+      color: var(--primary);
+      width: 20px;
+      text-align: center;
+    }
+    
+    .footer-info {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    
+    .footer-info p {
+      margin-bottom: 10px;
+    }
+    
+    .email-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+    
+    .email-link:hover {
+      color: var(--secondary);
+      text-decoration: underline;
+    }
+    
+    @media (max-width: 768px) {
+      .error-number {
+        font-size: 6rem;
+      }
+      
+      .error-title {
+        font-size: 1.8rem;
+      }
+      
+      .error-message {
+        font-size: 1.1rem;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+      }
+      
+      .btn {
+        width: 100%;
+        padding: 16px 20px;
+      }
+      
+      .tech-info {
+        grid-template-columns: 1fr;
+        max-width: 300px;
+      }
+      
+      .error-illustration {
+        max-width: 280px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <i class="fas fa-lock"></i>
+      </div>
+      <h1>清爽代理服务</h1>
+    </header>
+
+    <main>
+      <div class="error-container">
+        <div class="error-number">404</div>
+        <h2 class="error-title">哎呀！页面未找到</h2>
+        
+        <div class="error-illustration">
+          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#4361ee" d="M200,50 C250,30 300,40 330,80 C360,120 340,180 300,200 C260,220 200,220 160,190 C120,160 100,110 130,70 C160,30 200,50 200,50 Z" opacity="0.1"/>
+            <circle cx="150" cy="120" r="50" fill="#4cc9f0" opacity="0.2"/>
+            <circle cx="250" cy="130" r="60" fill="#4895ef" opacity="0.2"/>
+            <path fill="#4361ee" d="M180,200 C150,220 120,210 100,180 C80,150 90,120 120,110 C150,100 170,130 180,160 C190,190 180,200 180,200 Z" opacity="0.2"/>
+            <path fill="#3f37c9" d="M220,190 C240,210 270,210 290,180 C310,150 300,120 270,110 C240,100 220,130 210,160 C200,190 220,190 220,190 Z" opacity="0.2"/>
+            <circle cx="200" cy="160" r="70" fill="white" stroke="#4361ee" stroke-width="3"/>
+            <circle cx="180" cy="140" r="10" fill="#4361ee"/>
+            <circle cx="220" cy="140" r="10" fill="#4361ee"/>
+            <path d="M170,180 Q200,200 230,180" stroke="#4361ee" stroke-width="3" fill="none"/>
+            <path d="M120,70 L150,90 L140,50" stroke="#f87171" stroke-width="8" stroke-linecap="round" fill="none"/>
+            <path d="M280,60 L250,90 L270,40" stroke="#f87171" stroke-width="8" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        
+        <p class="error-message">
+          您正在寻找的页面可能已被移除、重命名或暂时不可用。请检查URL是否正确，或使用下面的按钮返回首页。
+        </p>
+        
+        <div class="action-buttons">
+          <a href="index.html" class="btn btn-primary">
+            <i class="fas fa-home"></i> 返回首页
+          </a>
+          <a href="mailto:yangle.q@outlook.com" class="btn btn-outline">
+            <i class="fas fa-envelope"></i> 联系支持
+          </a>
+        </div>
+      </div>
+      
+      <div class="error-reasons">
+        <h3 class="reasons-title">
+          <i class="fas fa-question-circle"></i>
+          可能的原因
+        </h3>
+        
+        <div class="reasons-list">
+          <div class="reason-item">
+            <i class="fas fa-link"></i>
+            <div>
+              <strong>链接已失效</strong>
+              <p>页面可能已被移除或链接地址已更改</p>
+            </div>
+          </div>
+          
+          <div class="reason-item">
+            <i class="fas fa-keyboard"></i>
+            <div>
+              <strong>输入错误</strong>
+              <p>URL地址可能存在拼写错误或大小写问题</p>
+            </div>
+          </div>
+          
+          <div class="reason-item">
+            <i class="fas fa-server"></i>
+            <div>
+              <strong>临时问题</strong>
+              <p>服务可能正在进行维护或遇到临时问题</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <footer>
+      <div class="tech-info">
+        <div class="tech-info-item">
+          <i class="fas fa-cloud"></i>
+          <span>部署：CloudFlare Workers</span>
+        </div>
+        <div class="tech-info-item">
+          <i class="fas fa-code"></i>
+          <span>前端开发：DeepSeek</span>
+        </div>
+        <div class="tech-info-item">
+          <i class="fas fa-user"></i>
+          <span>站主：meteorite</span>
+        </div>
+        <div class="tech-info-item">
+          <i class="fas fa-server"></i>
+          <span>服务：jsproxy</span>
+        </div>
+      </div>
+      
+      <div class="footer-info">
+        <p>© 2025 清爽代理服务 | 安全上网，自由探索</p>
+        <p>遇到问题？联系支持: <a href="mailto:yangle.q@outlook.com" class="email-link">yangle.q@outlook.com</a></p>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
