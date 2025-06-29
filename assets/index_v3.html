@@ -1,168 +1,681 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-  <title>Page Sandbox</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>清爽代理 - 安全快速的网络访问</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <base target="_blank">
   <style>
+    :root {
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --secondary: #3f37c9;
+      --accent: #4cc9f0;
+      --success: #4ade80;
+      --warning: #f87171;
+      --light: #f9fafb;
+      --dark: #1f2937;
+      --gray: #9ca3af;
+      --light-gray: #f3f4f6;
+      --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
     body {
-      padding: 0 0.5em;
+      font-family: 'Nunito', sans-serif;
+      background-color: #f0f7ff;
+      background-image: linear-gradient(135deg, #e6f0ff 0%, #f8fbff 100%);
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      line-height: 1.6;
     }
-    .box {
-      margin-top: 1em;
+    
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px;
     }
+    
+    header {
+      text-align: center;
+      padding: 30px 0;
+      margin-bottom: 20px;
+      animation: fadeIn 1s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .logo {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      color: white;
+      font-size: 2.5rem;
+      box-shadow: 0 10px 25px rgba(67, 97, 238, 0.3);
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 800;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto 20px;
+      color: var(--gray);
+    }
+    
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: var(--card-shadow);
+      animation: slideUp 0.8s ease;
+      border: 1px solid #e5e7eb;
+    }
+    
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .card-title {
+      display: flex;
+      align-items: center;
+      margin-bottom: 25px;
+      font-size: 1.5rem;
+      color: var(--primary);
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--light-gray);
+    }
+    
+    .card-title i {
+      margin-right: 12px;
+      font-size: 1.8rem;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .input-group {
+      display: flex;
+      margin-bottom: 25px;
+      border-radius: 50px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(67, 97, 238, 0.15);
+      border: 1px solid #e5e7eb;
+      transition: var(--transition);
+    }
+    
+    .input-group:focus-within {
+      box-shadow: 0 5px 20px rgba(67, 97, 238, 0.25);
+      border-color: var(--primary-light);
+    }
+    
     #txtURL {
-      width: 100%;
-      height: 2em;
-      text-indent: 0.5em;
-      padding: 0.25em 0;
+      flex-grow: 1;
+      padding: 18px 25px;
+      font-size: 1.1rem;
+      border: none;
+      background: white;
+      color: var(--dark);
+      outline: none;
+      font-family: 'Nunito', sans-serif;
     }
+    
+    #txtURL::placeholder {
+      color: var(--gray);
+    }
+    
     #btnGo {
-      width: 100%;
-      font-size: 1.5em;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      color: white;
+      border: none;
+      padding: 0 35px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Nunito', sans-serif;
     }
-    #list a {
-      margin: 1em;
+    
+    #btnGo:hover {
+      background: linear-gradient(to right, var(--secondary), var(--primary));
+      transform: translateY(-2px);
+    }
+    
+    .sites-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 20px;
+      margin-top: 15px;
+    }
+    
+    .site-card {
+      background: var(--light);
+      border-radius: 12px;
+      padding: 20px 15px;
+      text-align: center;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+    }
+    
+    .site-card:hover {
+      transform: translateY(-5px);
+      background: white;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      border-color: var(--primary-light);
+    }
+    
+    .site-card a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      width: 100%;
+    }
+    
+    .site-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--light-gray), white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+      color: var(--primary);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .site-name {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--dark);
+      text-transform: capitalize;
+    }
+    
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin-top: 20px;
+    }
+    
+    .feature {
+      background: var(--light);
+      padding: 25px;
+      border-radius: 12px;
+      text-align: center;
+      transition: var(--transition);
+      border: 1px solid #e5e7eb;
+    }
+    
+    .feature:hover {
+      transform: translateY(-5px);
+      background: white;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    }
+    
+    .feature i {
+      font-size: 2.5rem;
+      background: linear-gradient(to right, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 15px;
+    }
+    
+    .feature h3 {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
+    
+    .feature p {
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+    
+    .backup-links {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .backup-link-item {
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      background: var(--light);
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--dark);
+      transition: var(--transition);
+      border: 1px solid #e5e7eb;
+    }
+    
+    .backup-link-item:hover {
+      background: white;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transform: translateX(5px);
+    }
+    
+    .backup-link-item i {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--light-gray), white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      font-size: 1.2rem;
+      color: var(--primary);
+    }
+    
+    .backup-link-text {
+      flex-grow: 1;
+    }
+    
+    .backup-link-text h3 {
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+      color: var(--dark);
+    }
+    
+    .backup-link-text p {
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+    
+    footer {
+      padding: 30px 0;
+      margin-top: auto;
+      font-size: 0.9rem;
+      color: var(--gray);
+      border-top: 1px solid #e5e7eb;
+    }
+    
+    .email-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+    
+    .email-link:hover {
+      color: var(--secondary);
+      text-decoration: underline;
+    }
+    
+    .tech-info {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    
+    .tech-info-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      background: rgba(243, 244, 246, 0.5);
+      border-radius: 10px;
+      font-size: 0.9rem;
+    }
+    
+    .tech-info-item i {
+      margin-right: 10px;
+      color: var(--primary);
+      width: 20px;
+      text-align: center;
+    }
+    
+    .blog-card {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background: var(--light);
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--dark);
+      transition: var(--transition);
+      border: 1px solid #e5e7eb;
+      margin-top: 20px;
+    }
+    
+    .blog-card:hover {
+      background: white;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transform: translateY(-3px);
+    }
+    
+    .blog-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--light-gray), white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+    
+    .blog-text h3 {
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+      color: var(--dark);
+    }
+    
+    .blog-text p {
+      font-size: 0.9rem;
+      color: var(--gray);
+    }
+    
+    .footer-info {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    
+    .footer-info p {
+      margin-bottom: 10px;
+    }
+    
+    @media (max-width: 768px) {
+      .input-group {
+        flex-direction: column;
+        border-radius: 12px;
+      }
+      
+      #txtURL {
+        padding: 15px;
+        border-radius: 12px 12px 0 0;
+      }
+      
+      #btnGo {
+        padding: 15px;
+        border-radius: 0 0 12px 12px;
+        width: 100%;
+      }
+      
+      .sites-grid {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      }
+      
+      .card-title {
+        font-size: 1.3rem;
+      }
+      
+      .tech-info {
+        grid-template-columns: 1fr;
+        max-width: 300px;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="box">
-    <input id="txtURL" type="text" value="www.google.com" autofocus>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <i class="fas fa-lock"></i>
+      </div>
+      <h1>清爽代理服务</h1>
+      <p class="subtitle">
+        安全、快速、稳定的网络访问体验。突破限制，自由探索互联网世界。
+      </p>
+    </header>
+
+    <main>
+      <div class="card">
+        <div class="card-title">
+          <i class="fas fa-globe-americas"></i>
+          <h2>开始使用代理</h2>
+        </div>
+        
+        <div class="input-group">
+          <input id="txtURL" type="text" placeholder="输入网址 (例如: www.google.com)" value="www.google.com" autofocus>
+          <button id="btnGo">开始代理 <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+      
+      <!-- 备用链接卡片 -->
+      <div class="card">
+        <div class="card-title">
+          <i class="fas fa-link"></i>
+          <h2>备用链接</h2>
+        </div>
+        
+        <div class="backup-links">
+          <a href="https://hi.hellofrom.cn" class="backup-link-item">
+            <i class="fas fa-external-link-alt"></i>
+            <div class="backup-link-text">
+              <h3>hi.hellofrom.cn</h3>
+              <!-- 更新了描述文本 -->
+              <p>备用访问链接，确保服务可用</p>
+            </div>
+          </a>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-title">
+          <i class="fas fa-rocket"></i>
+          <h2>快速访问热门网站</h2>
+        </div>
+        
+        <div class="sites-grid" id="list">
+          <!-- 热门网站图标将通过JS动态生成 -->
+        </div>
+        
+        <!-- 添加站主博客卡片 -->
+        <a href="https://blog.lemonstar.me" class="blog-card">
+          <div class="blog-icon">
+            <i class="fas fa-blog"></i>
+          </div>
+          <div class="blog-text">
+            <h3>站主博客</h3>
+            <p>blog.lemonstar.me</p>
+          </div>
+        </a>
+      </div>
+      
+      <div class="card">
+        <div class="card-title">
+          <i class="fas fa-star"></i>
+          <h2>服务优势</h2>
+        </div>
+        
+        <div class="features">
+          <div class="feature">
+            <i class="fas fa-lock"></i>
+            <h3>安全加密</h3>
+            <p>所有流量经过加密处理，保护您的隐私安全</p>
+          </div>
+          
+          <div class="feature">
+            <i class="fas fa-bolt"></i>
+            <h3>高速连接</h3>
+            <p>全球节点加速，提供极速浏览体验</p>
+          </div>
+          
+          <div class="feature">
+            <i class="fas fa-infinity"></i>
+            <h3>无限访问</h3>
+            <p>突破地域限制，访问全球内容</p>
+          </div>
+          
+          <div class="feature">
+            <i class="fas fa-shield-alt"></i>
+            <h3>安全防护</h3>
+            <p>拦截恶意网站和跟踪器，保护设备安全</p>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <footer>
+      <div class="tech-info">
+        <div class="tech-info-item">
+          <i class="fas fa-cloud"></i>
+          <span>部署：CloudFlare Workers</span>
+        </div>
+        <div class="tech-info-item">
+          <i class="fas fa-code"></i>
+          <span>前端开发：DeepSeek</span>
+        </div>
+        <div class="tech-info-item">
+          <i class="fas fa-user"></i>
+          <!-- 更新为 Meteorite -->
+          <span>站主：Meteorite</span>
+        </div>
+        <div class="tech-info-item">
+          <i class="fas fa-server"></i>
+          <!-- 更新为 JSproxy -->
+          <span>服务：JSproxy</span>
+        </div>
+      </div>
+      
+      <div class="footer-info">
+        <p>© 2025 清爽代理服务 | 安全上网，自由探索</p>
+        <p>遇到问题？联系支持: <a href="mailto:yangle.q@outlook.com" class="email-link">yangle.q@outlook.com</a></p>
+      </div>
+    </footer>
   </div>
-  <div class="box">
-    <button id="btnGo">Go</button>
-  </div>
-  <div class="box">
-    <span>切换线路:</span>
-    <select id="selNode"></select>
-  </div>
-  <div class="box" id="list">
-  </div>
+
   <script>
-    const PAGE_CONF_SET = 110
-    const PAGE_CONF_GET = 111
-
-    const SW_CONF_RETURN = 112
-    const SW_CONF_CHANGE = 113
-
-    const PAGE_READY_CHECK = 200
-    const SW_READY = 201
-
-    const sw = navigator.serviceWorker
-
-
-    sw.addEventListener('message', onSwMsg)
-    sendMsgToSw(PAGE_READY_CHECK)
-
-    btnGo.onclick = function() {
-      const text = txtURL.value.trim()
+    // 绑定按钮事件
+    document.getElementById('btnGo').onclick = function() {
+      const text = document.getElementById('txtURL').value.trim();
       if (text) {
-        const url = './-----' + text
-        open(url, '_blank', 'noopener,noreferrer')
+        const url = './-----' + text;
+        open(url, '_blank', 'noopener,noreferrer');
       }
-    }
-    txtURL.onkeypress = function(e) {
+    };
+    
+    document.getElementById('txtURL').onkeypress = function(e) {
       if (e.keyCode === 13) {
-        btnGo.onclick()
+        document.getElementById('btnGo').click();
       }
-    }
-    txtURL.setSelectionRange(0, txtURL.value.length)
+    };
+    
+    // 初始化选中文本
+    document.getElementById('txtURL').setSelectionRange(0, document.getElementById('txtURL').value.length);
 
-
-    function onSwMsg(e) {
-      const [cmd, msg] = e.data
-
-      switch (cmd) {
-      case SW_CONF_RETURN:
-        conf = msg
-        showConf()
-        break
-
-      case SW_CONF_CHANGE:
-        conf = msg
-        updateSelected()
-        break
-
-      case SW_READY:
-        console.log('sw ready')
-        showIcons()
-        sendMsgToSw(PAGE_CONF_GET)
-        break
-      }
-    }
-
-    function onSwFail(err) {
-      txtURL.value = err
-    }
-
-    selNode.onchange = function() {
-      const item = this.options[this.selectedIndex]
-      const node = item.value
-      conf.node_default = node
-      sendMsgToSw(PAGE_CONF_SET, conf)
-    }
-
-    function sendMsgToSw(cmd, val) {
-      const ctl = sw.controller
-      if (!ctl) {
-        console.log('ctl is null')
-        return
-      }
-      ctl.postMessage([cmd, val])
-    }
-
+    // 网站列表数据 - 调整后的顺序
     const SITE_LIST = [
-      ['google', ''],
-      ['youtube', ''],
-      ['twitter', 'twitter.com/google'],
-      ['flickr', ''],
-      ['quora', 'www.quora.com/topic/JavaScript-programming-language'],
-      ['twitch', 'www.twitch.tv/'],
-      ['reddit', ''],
-      ['wiki', 'zh.wikipedia.org/'],
-      ['gist', 'gist.github.com/'],
-      ['facebook', 'facebook.com/Google/'],
-      ['blogger', ''],
-    ]
+      ['google', 'www.google.com'],
+      ['youtube', 'www.youtube.com'],
+      ['twitter', 'twitter.com'],
+      ['facebook', 'facebook.com'],
+      ['instagram', 'instagram.com'],
+      ['pinterest', 'pinterest.com'],
+      ['spotify', 'spotify.com'],
+      ['github', 'github.com'],
+      ['amazon', 'www.amazon.com'],
+      ['ebay', 'www.ebay.com'],
+      ['netflix', 'www.netflix.com'],
+      ['whatsapp', 'web.whatsapp.com'],
+      ['yahoo', 'www.yahoo.com'],
+      ['linkedin', 'linkedin.com'],
+      ['flickr', 'www.flickr.com'],
+      ['quora', 'www.quora.com'],
+      ['twitch', 'www.twitch.tv'],
+      ['reddit', 'www.reddit.com'],
+      ['wiki', 'www.wikipedia.org'],
+      ['blogger', 'blogger.com'],
+      ['chatgpt', 'chat.openai.com']
+    ];
 
+    // 网站图标映射
+    const siteIcons = {
+      'google': 'fab fa-google',
+      'youtube': 'fab fa-youtube',
+      'twitter': 'fab fa-twitter',
+      'facebook': 'fab fa-facebook',
+      'instagram': 'fab fa-instagram',
+      'pinterest': 'fab fa-pinterest',
+      'spotify': 'fab fa-spotify',
+      'github': 'fab fa-github',
+      'amazon': 'fab fa-amazon',
+      'ebay': 'fab fa-ebay',
+      'netflix': 'far fa-globe',
+      'whatsapp': 'fab fa-whatsapp',
+      'yahoo': 'fab fa-yahoo',
+      'linkedin': 'fab fa-linkedin',
+      'flickr': 'fab fa-flickr',
+      'quora': 'fab fa-quora',
+      'twitch': 'fab fa-twitch',
+      'reddit': 'fab fa-reddit',
+      'wiki': 'fab fa-wikipedia-w',
+      'blogger': 'fab fa-blogger',
+      'chatgpt': 'fas fa-robot'
+    }
+
+    // 显示网站图标
     function showIcons() {
+      const list = document.getElementById('list');
       list.innerHTML = SITE_LIST.map(v => {
-        let [id, url] = v
-        url = url || `www.${id}.com/`
-        return `\
-<a rel="noopener noreferrer" href=./-----https://${url}>\
-<img width=128 height=128 src=__sys__/assets/ico/${id}.png></a>`
-      }).join('')
+        let [id, domain] = v;
+        const iconClass = siteIcons[id] || 'fas fa-globe';
+        
+        return `
+          <div class="site-card">
+            <a rel="noopener noreferrer" href="./-----https://${domain}">
+              <div class="site-icon">
+                <i class="${iconClass}"></i>
+              </div>
+              <div class="site-name">${id}</div>
+            </a>
+          </div>
+        `;
+      }).join('');
     }
 
-    function addNodeItem(id, text) {
-      const optEl = document.createElement('option')
-      optEl.id = '--' + id
-      optEl.text = text
-      optEl.value = id
-      selNode.appendChild(optEl)
-    }
-
-    function updateSelected() {
-      const id = conf.node_default
-      const item = document.getElementById('--' + id)
-      if (item) {
-        item.selected = true
-      } else {
-        console.warn('unknown node:', id)
-      }
-    }
-
-    function showConf() {
-      for (const [id, node] of Object.entries(conf.node_map)) {
-        if (!node.hidden) {
-          addNodeItem(id, node.label)
-        }
-      }
-      updateSelected()
-    }
+    // 初始化页面
+    document.addEventListener('DOMContentLoaded', function() {
+      // 初始化网站图标
+      showIcons();
+    });
   </script>
 </body>
 </html>
