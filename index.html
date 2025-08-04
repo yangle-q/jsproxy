@@ -1153,6 +1153,30 @@
         shape.style.animationDuration = `${duration}s`;
       });
     });
+    // 消息类型常量
+const PAGE_CONF_SET = 110  // 页面发送配置
+const SW_CONF_RETURN = 112 // SW返回配置
+
+// 消息监听
+sw.addEventListener('message', onSwMsg)
+
+// 消息处理函数
+function onSwMsg(e) {
+  switch(e.data[0]) {
+    case SW_CONF_RETURN:
+      conf = msg // 接收代理配置
+      showConf() // 更新节点选择器
+      break;
+    case SW_READY:
+      showIcons() // 显示网站图标
+      break;
+  }
+}
+
+// 发送消息给Service Worker
+function sendMsgToSw(cmd, val) {
+  navigator.serviceWorker.controller.postMessage([cmd, val])
+}
   </script>
 </body>
 </html>
