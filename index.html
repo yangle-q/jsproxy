@@ -793,7 +793,6 @@
         opacity: 0;
       }
     }
-    
     @media (max-width: 768px) {
       .input-group {
         flex-direction: column;
@@ -884,6 +883,12 @@
         <div class="input-group">
           <input id="txtURL" type="text" placeholder="输入网址访问，或输入内容使用Google搜索" autofocus>
           <button id="btnGo"><span>开始代理</span> <i class="fas fa-arrow-right"></i></button>
+        </div>
+        
+        
+        <div class="status-indicator">
+          <span class="status-dot" id="statusDot"></span>
+          <span id="statusText">正在连接服务...</span>
         </div>
       </div>
       
@@ -989,21 +994,144 @@
   </div>
 
   <script>
+    // ================ 常量定义 ================
+    const PAGE_CONF_SET = 110;
+    const PAGE_CONF_GET = 111;
+    const SW_CONF_RETURN = 112;
+    const SW_CONF_CHANGE = 113;
+    const PAGE_READY_CHECK = 200;
+    const SW_READY = 201;
+
+    
+    // ================ DOM 元素引用 ================
+    const txtURL = document.getElementById('txtURL');
+    const btnGo = document.getElementById('btnGo');
+    const selNode = document.getElementById('selNode');
+    const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+    
+    // ================ 初始化函数 ================
+    document.addEventListener('DOMContentLoaded', function() {
+      // 初始化网站图标
+      showIcons();
+      
+      // 为所有元素添加动画延迟
+      const animatedElements = document.querySelectorAll('.card, .feature, .site-card, .backup-link-item');
+      animatedElements.forEach((el, index) => {
+        el.style.animationDelay = `${index * 0.05}s`;
+      });
+      
+      // 创建粒子背景
+      createParticles();
+      
+      // 背景形状动画
+      const shapes = document.querySelectorAll('.shape');
+      shapes.forEach(shape => {
+        const duration = Math.random() * 20 + 10;
+        shape.style.animationDuration = `${duration}s`;
+      });
+      
+      // 初始化Service Worker通信
+      initServiceWorker();
+    });
+    
+    // ================ Service Worker 通信 ================
+    function initServiceWorker() {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js')
+          .then(registration => {
+            console.log('Service Worker 注册成功:', registration);
+            
+            // 监听消息
+            navigator.serviceWorker.addEventListener('message', onSwMsg);
+            
+            // 等待Service Worker激活
+            if (registration.active) {
+              sendMsgToSw(PAGE_READY_CHECK);
+            } else if (registration.installing) {
+              registration.installing.addEventListener('statechange', () => {
+                if (registration.installing.state === 'activated') {
+                  sendMsgToSw(PAGE_READY_CHECK);
+                }
+              });
+            }
+          })
+          .catch(error => {
+            console.log('Service Worker 注册失败:', error);
+            updateStatus(false, '服务连接失败');
+          });
+      } else {
+        console.warn('浏览器不支持Service Worker');
+        updateStatus(false, '浏览器不支持Service Worker');
+      }
+    }
+    
+    // 处理来自Service Worker的消息
+    function onSwMsg(event) {
+      const [cmd, msg] = event.data;
+      
+      switch (cmd) {
+        case SW_CONF_RETURN:
+          conf = msg;
+          showConf();
+          updateStatus(true, '服务已连接');
+          break;
+          
+        case SW_CONF_CHANGE:
+          conf = msg;
+          updateSelected();
+          break;
+          
+        case SW_READY:
+          console.log('Service Worker 已就绪');
+          sendMsgToSw(PAGE_CONF_GET);
+          updateStatus(true, '服务准备就绪');
+          break;
+          
+        default:
+          console.log('收到未知消息:', cmd, msg);
+      }
+    }
+    
+    // 发送消息给Service Worker
+    function sendMsgToSw(cmd, val) {
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage([cmd, val]);
+        console.log(`发送消息到Service Worker: CMD=${cmd}, VAL=`, val);
+      } else {
+        console.warn('Service Worker controller 不存在');
+      }
+    }
+    
+    // 更新状态指示器
+    function updateStatus(connected, message) {
+      if (connected) {
+        statusDot.classList.add('connected');
+        statusText.textContent = message;
+      } else {
+        statusDot.classList.remove('connected');
+        statusText.textContent = message;
+      }
+    }
+    
+    // ================ 代理功能 ================
     // 绑定按钮事件
-    document.getElementById('btnGo').onclick = function() {
-      const text = document.getElementById('txtURL').value.trim();
+    btnGo.addEventListener('click', function() {
+      const text = txtURL.value.trim();
       if (text) {
         const url = './-----' + text;
         open(url, '_blank', 'noopener,noreferrer');
       }
-    };
+    });
     
-    document.getElementById('txtURL').onkeypress = function(e) {
-      if (e.keyCode === 13) {
-        document.getElementById('btnGo').click();
+    // 输入框回车事件
+    txtURL.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        btnGo.click();
       }
-    };
-
+    });
+    
+    // ================ 网站图标功能 ================
     // 网站列表数据
     const SITE_LIST = [
       ['google', 'www.google.com'],
@@ -1076,7 +1204,7 @@
       }).join('');
     }
     
-    // 黑暗模式切换
+    // ================ 黑暗模式切换 ================
     const themeToggle = document.getElementById('theme-toggle');
     
     // 检查本地存储或系统偏好
@@ -1103,7 +1231,7 @@
       }, 300);
     });
 
-    // 粒子背景效果
+    // ================ 粒子背景效果 ================
     function createParticles() {
       const particles = document.getElementById('particles');
       const particleCount = 30;
@@ -1131,52 +1259,6 @@
         particles.appendChild(particle);
       }
     }
-    
-    // 初始化页面
-    document.addEventListener('DOMContentLoaded', function() {
-      // 初始化网站图标
-      showIcons();
-      
-      // 为所有元素添加动画延迟
-      const animatedElements = document.querySelectorAll('.card, .feature, .site-card, .backup-link-item');
-      animatedElements.forEach((el, index) => {
-        el.style.animationDelay = `${index * 0.05}s`;
-      });
-      
-      // 创建粒子背景
-      createParticles();
-      
-      // 背景形状动画
-      const shapes = document.querySelectorAll('.shape');
-      shapes.forEach(shape => {
-        const duration = Math.random() * 20 + 10;
-        shape.style.animationDuration = `${duration}s`;
-      });
-    });
-    // 消息类型常量
-const PAGE_CONF_SET = 110  // 页面发送配置
-const SW_CONF_RETURN = 112 // SW返回配置
-
-// 消息监听
-sw.addEventListener('message', onSwMsg)
-
-// 消息处理函数
-function onSwMsg(e) {
-  switch(e.data[0]) {
-    case SW_CONF_RETURN:
-      conf = msg // 接收代理配置
-      showConf() // 更新节点选择器
-      break;
-    case SW_READY:
-      showIcons() // 显示网站图标
-      break;
-  }
-}
-
-// 发送消息给Service Worker
-function sendMsgToSw(cmd, val) {
-  navigator.serviceWorker.controller.postMessage([cmd, val])
-}
   </script>
 </body>
 </html>
